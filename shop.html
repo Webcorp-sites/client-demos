@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SHOP ALL — ATELIER 015</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>*{font-family:'Inter',sans-serif}.serif{font-family:'Instrument Serif',serif}</style>
+</head>
+<body class="bg-[#f6f5f0] text-black">
+<nav class="flex justify-between items-center px-6 md:px-12 py-6 border-b border-black/10 sticky top-0 bg-[#f6f5f0] z-50">
+  <a href="index.html" class="serif text-2xl">ATELIER 015</a>
+  <div class="flex gap-6 text-[13px] items-center">
+    <a href="index.html">HOME</a>
+    <span class="opacity-30">SHOP </span>
+    <a href="cart.html" class="border border-black px-4 py-1 rounded-full">CART (<span id="cart-count">0</span>)</a>
+  </div>
+</nav>
+<div class="px-6 md:px-12 py-12">
+  <h1 class="serif text-6xl">Shop All</h1>
+  <p class="mt-4 opacity-60">Click ADD to send to cart. Then go to cart — it will appear there.</p>
+</div>
+<section id="grid" class="grid grid-cols-2 md:grid-cols-4 border-t border-black/10"></section>
+
+<script>
+const products = [
+  {id:1, name:" WINTER SET", price:1250, img:"image1.png"},
+  {id:2, name:" BLACK JACKET", price:1250, img:"image2.png"},
+  {id:3, name:" COMFY PANTS FOLDED", price:1250, img:"image3.png"},
+  {id:4, name:" WHITE TEE", price:650, img:"image4.jpeg"},
+  {id:5, name:" GREY PUFFER VEST", price:850, img:"image5.jpeg"},
+  {id:6, name:" LENGHTY TRENCH COAT", price:350, img:"image6.jpeg"},
+  {id:7, name:" CARGO PANTS", price:950, img:"image7.jpeg"},
+  {id:8, name:" BLACK HOODIE", price:580, img:"image8.jpeg"},
+  {id:9, name:" BLACK CAP", price:720, img:"image9.jpeg"},
+  {id:10, name:" CREWNECK SWEATER", price:280, img:"image10.jpeg"},
+  {id:11, name:" BEIGE CARGO SHORTS", price:780, img:"image12.jpeg"},
+  {id:12, name:" LIGHT BLUE JEANS", price:620, img:"image13.jpeg"},
+  {id:13, name:" BLACK CHINOS", price:320, img:"image14.jpeg"},
+  {id:14, name:" BLACK SHORTS", price:890, img:"image11.jpeg"},
+  {id:14, name:" 2pc COAT AND HOODIE", price:700, img:"full.png"},
+];
+
+function addToCart(id){
+  let cart = JSON.parse(localStorage.getItem('atelier_cart')||'[]');
+  const product = products.find(p=>p.id===id);
+  const existing = cart.find(c=>c.id===id);
+  if(existing) existing.qty++;
+  else cart.push({...product, qty:1});
+  localStorage.setItem('atelier_cart', JSON.stringify(cart));
+  updateCount();
+  const btn = document.getElementById('btn-'+id);
+  btn.innerText='ADDED ✓';
+  setTimeout(()=>btn.innerText='ADD TO CART',800);
+}
+function updateCount(){
+  const cart = JSON.parse(localStorage.getItem('atelier_cart')||'[]');
+  document.getElementById('cart-count').innerText = cart.reduce((a,b)=>a+b.qty,0);
+}
+function render(){
+  document.getElementById('grid').innerHTML = products.map(p=>`
+    <div class="border-r border-b border-black/10 p-4 md:p-6 flex flex-col">
+      <div class="aspect-[3/4] bg-[#e9e6df] overflow-hidden"><img src="${p.img}" class="w-full h-full object-cover"></div>
+      <div class="mt-3 flex justify-between text-[13px]"><span class="font-medium">${p.name}</span><span>R${p.price}</span></div>
+      <button id="btn-${p.id}" onclick="addToCart(${p.id})" class="mt-3 border border-black py-2 text-[11px] tracking-[0.2em] hover:bg-black hover:text-white transition">ADD TO CART</button>
+    </div>`).join('');
+  updateCount();
+}
+render();
+</script>
+<footer class="flex justify-between px-6 md:px-12 py-6 text-[11px] tracking-[0.2em] opacity-60 border-t border-black/10">
+  <span>© 2026 ATELIER 015 — MIDVAAL</span><span>INSTAGRAM • TIKTOK • EMAIL</span>
+</footer>
+</body>
+</html>
